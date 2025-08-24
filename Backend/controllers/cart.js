@@ -43,11 +43,11 @@ async function removeFromCart(req, res) {
     throw new NotFoundError("Cart not found");
   }
 
-  let doesProductExist = cart.items.filter(
+  const doesProductExist = cart.items.some(
     (product) => product.product.toString() === productId
   );
 
-  if (doesProductExist.length === 0) {
+  if (!doesProductExist) {
     throw new NotFoundError("Product not found");
   }
 

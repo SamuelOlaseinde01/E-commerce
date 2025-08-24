@@ -6,7 +6,6 @@ const {
 } = require("../controllers/userProfile");
 const { login, register } = require("../controllers/auth");
 const authMiddleware = require("../middleware/authMiddleware");
-const userInfoCheck = require("../middleware/userInfoCheck");
 const router = express.Router();
 
 router
