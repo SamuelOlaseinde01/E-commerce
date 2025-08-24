@@ -5,7 +5,6 @@ const UserProfileSchema = new mongoose.Schema(
     firstname: {
       type: String,
       match: [/^[a-zA-Z\s'-]+$/, "Invalid first name"],
-      trim: true,
       minlength: 3,
       maxlength: 50,
       trim: true,
@@ -16,13 +15,11 @@ const UserProfileSchema = new mongoose.Schema(
       trim: true,
       minlength: 3,
       maxlength: 50,
-      trim: true,
     },
     address: {
       type: String,
       trim: true,
       minlength: 5,
-      trim: true,
     },
     dateofbirth: {
       type: String,
@@ -34,7 +31,6 @@ const UserProfileSchema = new mongoose.Schema(
       ],
       minlength: 10,
       maxlength: 10,
-      trim: true,
     },
     phonenumber: {
       type: String,
