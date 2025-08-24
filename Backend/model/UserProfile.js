@@ -8,6 +8,7 @@ const UserProfileSchema = new mongoose.Schema(
       trim: true,
       minlength: 3,
       maxlength: 50,
+      trim: true,
     },
     lastname: {
       type: String,
@@ -15,11 +16,13 @@ const UserProfileSchema = new mongoose.Schema(
       trim: true,
       minlength: 3,
       maxlength: 50,
+      trim: true,
     },
     address: {
       type: String,
       trim: true,
       minlength: 5,
+      trim: true,
     },
     dateofbirth: {
       type: String,
@@ -31,12 +34,14 @@ const UserProfileSchema = new mongoose.Schema(
       ],
       minlength: 10,
       maxlength: 10,
+      trim: true,
     },
     phonenumber: {
       type: String,
       required: [true, "Please provide your phone number"],
       minlength: 11,
       maxlength: 11,
+      trim: true,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
