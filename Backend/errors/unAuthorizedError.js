@@ -1,9 +1,10 @@
 const { StatusCodes } = require("http-status-codes");
 
 class UnAuthorizedError extends Error {
-  constructor(message) {
+  constructor(message, field) {
     super(message);
     this.statusCode = StatusCodes.UNAUTHORIZED;
+    this.field = field;
   }
 }
 

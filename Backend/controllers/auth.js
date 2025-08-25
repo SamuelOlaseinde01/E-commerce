@@ -4,13 +4,12 @@ const {
   NotFoundError,
 } = require("../errors");
 const User = require("../model/User");
-const UserProfile = require("../model/UserProfile");
 
 async function register(req, res) {
   const { email, password } = req.body;
   const duplicateEmail = await User.findOne({ email: email.toLowerCase() });
   if (duplicateEmail) {
-    throw new BadRequestError("Email already exists");
+    throw new BadRequestError("Email already exists", "email");
   }
   const user = await User.create({
     email: email.toLowerCase(),
@@ -24,20 +23,27 @@ async function register(req, res) {
 
 async function login(req, res) {
   const { email, password } = req.body;
-  if (!email || !password) {
-    throw new BadRequestError("Field cannot be empty");
+  if (!email) {
+    throw new BadRequestError("Field cannot be empty", "email");
+  }
+
+  if (!password) {
+    throw new BadRequestError("Field cannot be empty", "password");
   }
 
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw new NotFoundError("Account not found, please create a new one");
+    throw new NotFoundError(
+      "Account not found, please create a new one",
+      "email"
+    );
   }
 
   const isMatch = await user.comparePassword(password);
 
   if (!isMatch) {
-    throw new UnAuthorizedError("Password is incorrect");
+    throw new UnAuthorizedError("Password is incorrect", "password");
   }
 
   const token = user.createToken();

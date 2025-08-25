@@ -6,13 +6,14 @@ const {
 } = require("../controllers/userProfile");
 const { login, register } = require("../controllers/auth");
 const authMiddleware = require("../middleware/authMiddleware");
+const { upload } = require("../config/cloudinary");
 const router = express.Router();
 
 router
   .route("/profile")
   .get(authMiddleware, getUserInfo)
-  .post(authMiddleware, createUserInfo)
-  .patch(authMiddleware, updateUserInfo);
+  .post(authMiddleware, upload.single("image"), createUserInfo)
+  .patch(authMiddleware, upload.single("image"), updateUserInfo);
 router.route("/login").post(login);
 router.route("/register").post(register);
 

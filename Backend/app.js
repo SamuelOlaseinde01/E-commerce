@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const helmet = require("helmet");
 const { xss } = require("express-xss-sanitizer");
+const cors = require("cors");
 const notFound = require("./middleware/notFound");
 const errorHandlingMiddleWare = require("./middleware/errorHandlingMiddleware");
 const connectDb = require("./db/connectdb");
@@ -13,10 +14,11 @@ const app = express();
 
 const port = process.env.PORT || 3000;
 
-
+app.use(cors());
 app.use(xss());
 app.use(helmet());
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.use("/api/v1/orders", orderRouter);
 app.use("/api/v1/products", productsRouter);

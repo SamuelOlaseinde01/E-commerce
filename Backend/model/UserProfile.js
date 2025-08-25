@@ -39,6 +39,10 @@ const UserProfileSchema = new mongoose.Schema(
       maxlength: 11,
       trim: true,
     },
+    profilePicture: {
+      url: { type: String, trim: true },
+      public_id: { type: String, trim: true },
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
