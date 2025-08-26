@@ -37,7 +37,7 @@ export async function action({ request }) {
 
 export default function Register() {
   const navigation = useNavigation();
-  const msg = useActionData();
+  const error = useActionData();
   const [type, setType] = React.useState("password");
   const [visibility, setVisibility] = React.useState(false);
   const [cptype, setCpType] = React.useState("password");
@@ -78,14 +78,14 @@ export default function Register() {
                   type="email"
                   name="email"
                   placeholder="Enter your email address"
-                  className={msg?.field === "email" ? "error-input" : null}
+                  className={error?.field === "email" ? "error-input" : null}
                   required
                 />
               </div>
-              {msg?.field === "email" && (
+              {error?.field === "email" && (
                 <h5>
                   <Warning />
-                  {msg.msg}
+                  {error.msg}
                 </h5>
               )}
             </div>
@@ -118,17 +118,17 @@ export default function Register() {
                   type={cptype}
                   name="cpassword"
                   placeholder="Confirm your password"
-                  className={msg?.field === "password" ? "error-input" : null}
+                  className={error?.field === "password" ? "error-input" : null}
                   required
                 />
                 <div className="eye" onClick={handleCpClick}>
                   {cpVisibility ? <Visibility /> : <VisibilityOff />}
                 </div>
               </div>
-              {msg?.field === "password" && (
+              {error?.field === "password" && (
                 <h5>
                   <Warning />
-                  {msg.msg}
+                  {error.msg}
                 </h5>
               )}
             </div>

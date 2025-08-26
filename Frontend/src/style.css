@@ -32,7 +32,20 @@
   position: relative;
 }
 
-.user-register {
+.complete-profile-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+}
+
+.complete-profile-container > form {
+  width: 100%;
+}
+
+.user-register,
+.complete-profile {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,6 +61,18 @@
   align-items: center;
   padding: 10px;
   height: 100vh;
+}
+
+.complete-profile-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  text-align: center;
+}
+
+.complete-profile-header > h1 {
+  font-size: 2.6em;
 }
 
 .user-login-container > h1,
@@ -92,6 +117,14 @@
   font-weight: 500;
 }
 
+.label-container > input {
+  width: 100%;
+  padding: 15px;
+  font-size: 1em;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
 .input-container {
   display: flex;
   flex-direction: row;
@@ -106,6 +139,19 @@
   font-size: 1em;
   border: 1px solid black;
   border-radius: 5px;
+}
+
+.PhoneInput {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.PhoneInputInput {
+  border: none;
+  font-size: 1em;
 }
 
 .input-container > .lock {

@@ -7,12 +7,13 @@ const {
 const { login, register } = require("../controllers/auth");
 const authMiddleware = require("../middleware/authMiddleware");
 const { upload } = require("../config/cloudinary");
+const userInfoCheck = require("../middleware/userInfoCheck");
 const router = express.Router();
 
 router
   .route("/profile")
   .get(authMiddleware, getUserInfo)
-  .post(authMiddleware, upload.single("image"), createUserInfo)
+  .post(authMiddleware, userInfoCheck, upload.single("image"), createUserInfo)
   .patch(authMiddleware, upload.single("image"), updateUserInfo);
 router.route("/login").post(login);
 router.route("/register").post(register);

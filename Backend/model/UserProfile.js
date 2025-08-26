@@ -35,8 +35,7 @@ const UserProfileSchema = new mongoose.Schema(
     phonenumber: {
       type: String,
       required: [true, "Please provide your phone number"],
-      minlength: 11,
-      maxlength: 11,
+      match: [/^\+\d{1,3}(?:\s\d{3,4}){2,4}$/, "Invalid phone number provided"],
       trim: true,
     },
     profilePicture: {

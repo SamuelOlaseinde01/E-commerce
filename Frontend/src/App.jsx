@@ -10,6 +10,10 @@ import Register, {
   action as userRegisterAction,
 } from "./user-components/register";
 import NotFound from "./NotFound";
+import CompleteProfile, {
+  action as completeProfileAction,
+  loader as completeLoaderAction,
+} from "./user-components/CompleteProfile";
 
 export default function App() {
   const router = createBrowserRouter(
@@ -21,6 +25,12 @@ export default function App() {
           path="/register"
           element={<Register />}
           action={userRegisterAction}
+        />
+        <Route
+          path="/complete-profile"
+          element={<CompleteProfile />}
+          loader={completeLoaderAction}
+          action={completeProfileAction}
         />
         <Route path="*" element={<NotFound />} />
       </>

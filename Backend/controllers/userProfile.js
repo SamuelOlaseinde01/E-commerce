@@ -3,18 +3,35 @@ const User = require("../model/User");
 const UserProfile = require("../model/UserProfile");
 
 async function createUserInfo(req, res) {
-  const { userId } = req.user;
-  const { firstname, lastname, address, dateOfBirth, phoneNumber } = req.body;
-  const { path: url, filename: public_id } = req.file;
-  if (!firstname || !lastname || !dateOfBirth || !phoneNumber || !address) {
-    throw new BadRequestError("Field cannot be empty");
+  if (req.profileComplete) {
+    return res.status(200).json({ profileComplete: req.profileComplete });
   }
+  const { userId } = req.user;
+  const { firstname, lastname, address, dateofbirth, phonenumber } = req.body;
+  const url = req.file?.path || null;
+  const public_id = req.file?.filename || null;
+  if (!firstname) {
+    throw new BadRequestError("Field cannot be empty", "firstname");
+  }
+  if (!lastname) {
+    throw new BadRequestError("Field cannot be empty", "lastname");
+  }
+  if (!dateofbirth) {
+    throw new BadRequestError("Field cannot be empty", "dateofbirth");
+  }
+  if (!phonenumber) {
+    throw new BadRequestError("Field cannot be empty", "phonenumber");
+  }
+  if (!address) {
+    throw new BadRequestError("Field cannot be empty", "address");
+  }
+  console.log(req.body);
   const userInfo = await UserProfile.create({
     firstname,
     lastname,
     address,
-    dateofbirth: dateOfBirth,
-    phonenumber: phoneNumber,
+    dateofbirth,
+    phonenumber,
     user: userId,
     profilePicture: { url, public_id },
   });
@@ -25,6 +42,9 @@ async function createUserInfo(req, res) {
 async function getUserInfo(req, res) {
   const { userId } = req.user;
   const userInfo = await UserProfile.findOne({ user: userId }).populate("user");
+  if (!userInfo) {
+    return res.status(200).json({ profileComplete: req.profileComplete });
+  }
   res.status(200).json({ userInfo });
 }
 
@@ -37,6 +57,11 @@ async function updateUserInfo(req, res) {
     if (existingUser && existingUser._id.toString() !== userId) {
       throw new BadRequestError("Email already in use");
     }
+
+    if (existingUser.email === email) {
+      throw new BadRequestError("Cannot overwrite same data", "email");
+    }
+
     const user = await User.findOneAndUpdate(
       { _id: userId },
       { email: email.toLowerCase() },
@@ -70,6 +95,20 @@ async function updateUserInfo(req, res) {
     await userProfile.save();
 
     return res.status(200).json({ userProfile });
+  }
+
+  const userProfile = await UserProfile.findOne({ user: userId });
+  if (!userProfile) throw new NotFoundError("User not found");
+
+  const isSame = Object.keys(profileUpdates).every(
+    (key) => userProfile[key] === profileUpdates[key]
+  );
+
+  if (isSame) {
+    throw new BadRequestError(
+      "Cannot overwrite same data",
+      Object.keys(profileUpdates)[0]
+    );
   }
 
   const userInfo = await UserProfile.findOneAndUpdate(
