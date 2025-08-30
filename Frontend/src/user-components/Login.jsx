@@ -6,7 +6,13 @@ import {
   MailOutline,
   Warning,
 } from "@mui/icons-material";
-import { Form, useNavigation, Link, useActionData } from "react-router-dom";
+import {
+  Form,
+  useNavigation,
+  Link,
+  useActionData,
+  redirect,
+} from "react-router-dom";
 import { login } from "./user-api";
 
 export async function action({ request }) {
@@ -14,7 +20,7 @@ export async function action({ request }) {
   const creds = Object.fromEntries(formData.entries());
   try {
     await login(creds);
-    return null;
+    return redirect("/products");
   } catch (error) {
     return error;
   }

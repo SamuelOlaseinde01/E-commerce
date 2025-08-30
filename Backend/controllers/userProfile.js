@@ -1,4 +1,8 @@
-const { BadRequestError, NotFoundError } = require("../errors");
+const {
+  BadRequestError,
+  NotFoundError,
+  UnAuthorizedError,
+} = require("../errors");
 const User = require("../model/User");
 const UserProfile = require("../model/UserProfile");
 
@@ -25,10 +29,33 @@ async function createUserInfo(req, res) {
   if (!address) {
     throw new BadRequestError("Field cannot be empty", "address");
   }
-  console.log(req.body);
+
+  let year = dateofbirth.split("-")[0];
+  let age = new Date().getFullYear() - Number(year);
+
+  let month = dateofbirth.split("-")[1];
+  let day = dateofbirth.split("-")[2];
+
+  if (
+    new Date().getMonth() + 1 < Number(month) ||
+    (new Date().getMonth() + 1 === Number(month) &&
+      new Date().getDate() < Number(day))
+  ) {
+    age--;
+  }
+
+  if (age < 13) {
+    throw new UnAuthorizedError(
+      "Oops! You need to be at least 13 years old to use our services.",
+      "dateofbirth"
+    );
+  }
+
+  console.log(req.file);
+
   const userInfo = await UserProfile.create({
-    firstname,
-    lastname,
+    firstname: firstname.toLowerCase(),
+    lastname: lastname.toLowerCase(),
     address,
     dateofbirth,
     phonenumber,
@@ -41,7 +68,10 @@ async function createUserInfo(req, res) {
 
 async function getUserInfo(req, res) {
   const { userId } = req.user;
-  const userInfo = await UserProfile.findOne({ user: userId }).populate("user");
+  const userInfo = await UserProfile.findOne({ user: userId }).populate(
+    "user",
+    "-password"
+  );
   if (!userInfo) {
     return res.status(200).json({ profileComplete: req.profileComplete });
   }

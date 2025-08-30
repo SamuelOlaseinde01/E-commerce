@@ -13,7 +13,7 @@ async function authMiddleware(req, res, next) {
     req.user = { userId, email };
     next();
   } catch (error) {
-    console.error(error);
+    return res.status(400).json(error);
   }
 }
 

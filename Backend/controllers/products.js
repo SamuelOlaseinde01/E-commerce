@@ -10,7 +10,7 @@ async function getAllProducts(req, res) {
     query.category = category;
   }
 
-  if (search) {
+  if (search && search != null) {
     query.title = { $regex: search, $options: "i" };
   }
 
@@ -22,7 +22,7 @@ async function getAllProducts(req, res) {
   }
 
   const page = Number(req.query.page) || 1;
-  const limit = Number(req.query.limit) || 10;
+  const limit = Number(req.query.limit) || 20;
   const skip = (page - 1) * limit;
   mongoQuery = mongoQuery.skip(skip).limit(limit);
 

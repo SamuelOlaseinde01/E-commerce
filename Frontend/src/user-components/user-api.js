@@ -55,7 +55,6 @@ export async function getProfile() {
   const res = await fetch("http://localhost:3000/api/v1/user/profile", {
     method: "GET",
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   });
@@ -64,4 +63,23 @@ export async function getProfile() {
     throw { msg: data.msg, field: data.field };
   }
   return data;
+}
+
+export async function getProducts(search) {
+  const res = await fetch(
+    `http://localhost:3000/api/v1/products?search=${search}`
+  );
+  const data = await res.json();
+  if (!res.ok) {
+    throw { msg: data.msg, field: data.field };
+  }
+  return data;
+}
+
+export async function getProduct(id) {
+  const res = await fetch(`http://localhost:3000/api/v1/products/${id}`);
+  const data = res.json();
+  if (!res.ok) {
+    throw { msg: data.msg };
+  }
 }

@@ -32,20 +32,7 @@
   position: relative;
 }
 
-.complete-profile-container {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  justify-content: center;
-  align-items: center;
-}
-
-.complete-profile-container > form {
-  width: 100%;
-}
-
-.user-register,
-.complete-profile {
+.user-register {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -61,18 +48,6 @@
   align-items: center;
   padding: 10px;
   height: 100vh;
-}
-
-.complete-profile-header {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: center;
-  text-align: center;
-}
-
-.complete-profile-header > h1 {
-  font-size: 2.6em;
 }
 
 .user-login-container > h1,
@@ -104,6 +79,94 @@
   align-items: center;
   gap: 16px;
   width: 400px;
+}
+
+.complete-profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  padding: 10px;
+  margin: 30px;
+}
+
+.complete-profile-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 450px;
+  justify-content: center;
+  align-items: center;
+}
+
+.skip {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 1.2em;
+  color: black;
+}
+
+.complete-profile-container > form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.complete-profile-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  text-align: center;
+}
+
+.complete-profile-header > h1 {
+  font-size: 2.9em;
+}
+
+.complete-profile-header > p {
+  color: rgb(65, 65, 65);
+  font-style: italic;
+}
+
+.cp-default-btn {
+  background-color: black;
+  color: white;
+  width: 100%;
+  padding: 15px;
+  font-size: 1.2em;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: 300ms;
+}
+
+.cp-default-btn:hover {
+  background-color: rgb(69, 68, 68);
+}
+
+.cp-loading-btn {
+  color: white;
+  width: 100%;
+  padding: 15px;
+  font-size: 1.2em;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: 300ms;
+  background-color: rgb(69, 68, 68);
+}
+
+.complete-profile-container > form > .label-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 8px;
 }
 
 .label-container {
@@ -141,9 +204,14 @@
   border-radius: 5px;
 }
 
+input[type="file"] {
+  border: none;
+  padding: 0;
+}
+
 .PhoneInput {
   width: 100%;
-  padding: 10px;
+  padding: 20px;
   font-size: 1em;
   border: 1px solid black;
   border-radius: 5px;
@@ -271,4 +339,261 @@ input:focus {
 
 .notfound > a:hover {
   background-color: rgb(56, 56, 56);
+}
+
+.logout-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
+  padding: 100px;
+  gap: 10px;
+}
+
+.logout-container > h1 {
+  font-size: 3em;
+  color: rgb(58, 58, 133);
+  font-weight: 400;
+}
+
+.logout-container > h3 {
+  width: 100%;
+  padding: 20px;
+  font-weight: 400;
+  background-color: rgb(211, 241, 211);
+  text-align: center;
+  color: green;
+}
+
+.logout-container > a {
+  text-decoration: none;
+  padding: 10px;
+  color: grey;
+  border: 1px solid grey;
+  width: fit-content;
+  text-align: center;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+  background-color: black;
+  color: white;
+  box-shadow: 0px 0px 10px black;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+nav {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+}
+
+nav > .cart > svg {
+  width: 30px;
+  height: 40px;
+}
+
+.logged-profile-icon-container > h3 {
+  background-color: black;
+  color: white;
+  padding: 3px 10px;
+  box-shadow: 0px 0px 80px rgb(255, 255, 255);
+  border-radius: 50%;
+  transition: 300ms;
+  cursor: pointer;
+}
+
+.logged-profile-icon-container > h3:hover {
+  box-shadow: 0px 0px 100px rgb(255, 255, 255);
+}
+
+.logged-profile-icon-container {
+  position: relative;
+}
+
+.logged-profile-icon-container > img {
+  display: block;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+  transition: 300ms;
+  cursor: pointer;
+}
+
+.logged-profile-icon-container > img:hover {
+  box-shadow: 0px 0px 20px rgb(52, 51, 51);
+}
+
+.logged-profile-icon-container > .profile-container {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  padding: 30px;
+  width: 250px;
+  gap: 20px;
+  position: absolute;
+  right: 0;
+  margin-top: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px grey;
+}
+
+.logged-profile-icon-container > .profile-container > .img-email > img {
+  display: block;
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%;
+  transition: 300ms;
+}
+
+.logged-profile-icon-container > .profile-container > .img-email {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.logged-profile-icon-container > .profile-container > .img-email > p {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+.logged-profile-icon-container > .profile-container > .img-email > .h3 {
+  width: 50px;
+  height: 50px;
+  background-color: black;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+
+.logged-profile-icon-container > .profile-container > div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.logged-profile-icon-container > .profile-container > div > a {
+  display: flex;
+  gap: 10px;
+  text-decoration: none;
+  padding: 10px;
+  color: black;
+  transition: 300ms;
+}
+
+.logged-profile-icon-container > .profile-container > div > a:hover {
+  background-color: rgb(237, 237, 237);
+  border-radius: 10px;
+  width: 100%;
+}
+
+.logged-profile-icon-container > h3 {
+  cursor: pointer;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+}
+
+.profile-icon > .user-icon {
+  cursor: pointer;
+}
+
+.profile-icon > .user-icon > svg {
+  width: 40px;
+  height: 40px;
+}
+
+.profile-icon > .login {
+  position: absolute;
+  background-color: white;
+  color: black;
+  width: 100px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  flex-direction: column;
+  box-shadow: 0px 0px 5px black;
+  right: 0;
+}
+
+.profile-icon > .login > a {
+  display: flex;
+  gap: 5px;
+  text-decoration: none;
+  color: black;
+  width: 100%;
+  padding: 10px;
+}
+
+.profile-icon > .login > a:hover {
+  background-color: rgb(237, 237, 237);
+  width: 100%;
+}
+
+.products-container {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
+}
+
+.product-container {
+  width: 180px;
+  height: 250px;
+  text-decoration: none;
+  color: black;
+  position: relative;
+}
+
+.product-container > img {
+  width: 100%;
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(245, 245, 245);
+}
+
+.product-container > .title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transition: 300ms;
+}
+
+.product-container > .title:hover {
+  color: rgb(198, 130, 4);
+}
+
+.product-container > .spinner {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  position: absolute !important;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
 }

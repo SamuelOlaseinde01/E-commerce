@@ -14,12 +14,15 @@ import CompleteProfile, {
   action as completeProfileAction,
   loader as completeLoaderAction,
 } from "./user-components/CompleteProfile";
+import Products, { loader as productsLoader } from "./user-components/Products";
+import Layout, { loader as userLayoutLoader } from "./user-components/layout";
+import Product from "./user-components/Product";
+import Logout from "./user-components/Logout";
 
 export default function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
-        <Route path="" element={<h1>Home</h1>} />
         <Route path="/login" element={<Login />} action={userLoginAction} />
         <Route
           path="/register"
@@ -32,6 +35,11 @@ export default function App() {
           loader={completeLoaderAction}
           action={completeProfileAction}
         />
+        <Route path="/logout" element={<Logout />} />
+        <Route path="/products" element={<Layout />} loader={userLayoutLoader}>
+          <Route index element={<Products />} loader={productsLoader} />
+          <Route path=":id" element={<Product />} />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </>
     )

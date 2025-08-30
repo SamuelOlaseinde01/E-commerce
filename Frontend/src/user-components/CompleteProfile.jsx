@@ -1,5 +1,11 @@
 import React from "react";
-import { Form, redirect, useActionData } from "react-router-dom";
+import {
+  Form,
+  redirect,
+  useActionData,
+  Link,
+  useNavigation,
+} from "react-router-dom";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { createProfile, getProfile } from "./user-api";
@@ -9,7 +15,6 @@ import { Warning } from "@mui/icons-material";
 export async function loader() {
   await authUser();
   const { userInfo } = await getProfile();
-  console.log(userInfo);
   if (userInfo) {
     return redirect("/products");
   }
@@ -28,16 +33,19 @@ export async function action({ request }) {
 
 export default function CompleteProfile() {
   const error = useActionData();
-  console.log(error);
+  const navigation = useNavigation();
   const [value, setValue] = React.useState();
   return (
     <>
       <div className="complete-profile">
+        <Link className="skip" to={"/products"}>
+          Skip
+        </Link>
+        <div className="complete-profile-header">
+          <h1>Complete Your Registration</h1>
+          <p>"Just a few more details to finish up!"</p>
+        </div>
         <div className="complete-profile-container">
-          <div className="complete-profile-header">
-            <h1>Complete Your Profile</h1>
-            <p>Just a few more details to finish up</p>
-          </div>
           <Form method="POST" encType="multipart/form-data">
             <div className="label-container">
               <label htmlFor="firstname">First Name:</label>
@@ -120,10 +128,21 @@ export default function CompleteProfile() {
               )}
             </div>
             <div className="label-container">
-              <label htmlFor="image">Upload your image(optional)</label>
-              <input type="file" id="image" accept="image/*" />
+              <label htmlFor="image">Upload your image(optional):</label>
+              <input type="file" id="image" accept="image/*" name="image" />
             </div>
-            <button>Submit</button>
+            <button
+              className={
+                navigation.state === "submitting"
+                  ? "cp-loading-btn"
+                  : "cp-default-btn"
+              }
+            >
+              {" "}
+              {navigation.state === "submitting"
+                ? "Saving..."
+                : "Save and continue"}
+            </button>
           </Form>
         </div>
       </div>
