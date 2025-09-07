@@ -7,6 +7,9 @@ const User = require("../model/User");
 
 async function register(req, res) {
   const { email, password } = req.body;
+  if (!password) {
+    throw new BadRequestError("Please provide your password");
+  }
   const duplicateEmail = await User.findOne({ email: email.toLowerCase() });
   if (duplicateEmail) {
     throw new BadRequestError("Email already exists", "email");

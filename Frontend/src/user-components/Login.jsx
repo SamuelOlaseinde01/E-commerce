@@ -31,6 +31,7 @@ export default function Login() {
   const error = useActionData();
   const [type, setType] = React.useState("password");
   const [visibility, setVisibility] = React.useState(false);
+  console.log(error);
 
   function handleClick() {
     setVisibility((prev) => !prev);

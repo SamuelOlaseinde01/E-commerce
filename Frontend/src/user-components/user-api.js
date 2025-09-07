@@ -60,7 +60,7 @@ export async function getProfile() {
   });
   const data = await res.json();
   if (!res.ok) {
-    throw { msg: data.msg, field: data.field };
+    return { msg: data.msg, field: data.field };
   }
   return data;
 }
@@ -82,4 +82,37 @@ export async function getProduct(id) {
   if (!res.ok) {
     throw { msg: data.msg };
   }
+  return data;
+}
+
+export async function addToCart(items) {
+  const token = localStorage.getItem("userToken");
+  const res = await fetch("http://localhost:3000/api/v1/orders/add-to-cart", {
+    method: "POST",
+    headers: {
+      "Content-Type": "Application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(items),
+  });
+  const data = res.json();
+  if (!res.ok) {
+    throw { msg: data.msg, field: data.field };
+  }
+  return data;
+}
+
+export async function getCart() {
+  const token = localStorage.getItem("userToken");
+  const res = await fetch("http://localhost:3000/api/v1/orders/add-to-cart", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    throw { msg: data.msg, field: data.field };
+  }
+  console.log(data);
+  return data.cart;
 }

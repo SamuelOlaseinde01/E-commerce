@@ -51,8 +51,6 @@ async function createUserInfo(req, res) {
     );
   }
 
-  console.log(req.file);
-
   const userInfo = await UserProfile.create({
     firstname: firstname.toLowerCase(),
     lastname: lastname.toLowerCase(),
@@ -72,8 +70,9 @@ async function getUserInfo(req, res) {
     "user",
     "-password"
   );
+  const user = await User.findById(userId).select("email");
   if (!userInfo) {
-    return res.status(200).json({ profileComplete: req.profileComplete });
+    return res.status(200).json({ user });
   }
   res.status(200).json({ userInfo });
 }

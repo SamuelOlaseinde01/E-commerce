@@ -1,4 +1,5 @@
 const { NotFoundError } = require("../errors");
+const mongoose = require("mongoose");
 const Cart = require("../model/Cart");
 const Order = require("../model/Order");
 const Products = require("../model/Products");
@@ -19,16 +20,25 @@ async function addToCart(req, res) {
     cart = await Cart.create({ user: userId, items: [] });
   }
 
-  const existingItemIndex = cart.items.findIndex(
-    (item) => item.product.toString() === req.body.product
-  );
-  if (existingItemIndex > -1) {
-    cart.items[existingItemIndex].quantity = req.body.quantity;
-  } else {
-    cart.items.push({
-      product: req.body.product,
-      quantity: req.body.quantity || 1,
-    });
+  for (const item of req.body) {
+    if (!mongoose.Types.ObjectId.isValid(item.product)) {
+      return res.status(400).json({ error: "Invalid product ID" });
+    }
+
+    console.log(item);
+
+    const existingIndex = cart.items.findIndex(
+      (cartItem) => cartItem.product.toString() === item.product
+    );
+
+    if (existingIndex > -1) {
+      cart.items[existingIndex].quantity = item.quantity;
+    } else {
+      cart.items.push({
+        product: item.product,
+        quantity: item.quantity || 1,
+      });
+    }
   }
 
   await cart.save();

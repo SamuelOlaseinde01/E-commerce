@@ -24,7 +24,6 @@ export async function action({ request }) {
   try {
     const formData = await request.formData();
     const userInfo = await createProfile(formData);
-    console.log(userInfo);
     return null;
   } catch (err) {
     return err;

@@ -8,23 +8,45 @@ import {
   ShoppingCartCheckout,
 } from "@mui/icons-material";
 import React from "react";
-import { Link, Outlet, redirect, useLoaderData } from "react-router-dom";
-import { getProfile } from "./user-api";
+import { Link, Outlet, useLoaderData } from "react-router-dom";
+import { addToCart, getCart, getProfile } from "./user-api";
 
 export async function loader() {
   try {
-    const { userInfo } = await getProfile();
-    return userInfo;
+    let cart = [];
+    const { userInfo: profile, user } = await getProfile();
+    if (!user && profile) {
+      if (localStorage.getItem("cart")) {
+        const lcCart = JSON.parse(localStorage.getItem("cart"));
+        const { cart: mergedCart } = await addToCart(lcCart);
+        localStorage.removeItem("cart");
+        return { profile, cart: mergedCart.items };
+      }
+      cart = await getCart();
+      return { profile, cart: cart.items };
+    }
+    if ((!user && !profile) || (user && !profile)) {
+      cart = JSON.parse(localStorage.getItem("cart"));
+      return { cart };
+    }
+    return { profile, email: user.email, cart };
   } catch (err) {
     return err;
   }
 }
 
 export default function Layout() {
-  const profile = useLoaderData();
+  const { profile, email, cart } = useLoaderData();
   const [profileState, setProfileState] = React.useState(false);
+  const [isLoaded, setLoaded] = React.useState(false);
   const firstname = profile?.firstname?.charAt(0).toUpperCase();
+  const fullName = `${profile?.firstname} ${profile?.lastname}`;
   const containerRef = React.useRef(null);
+
+  const profilePicUrl = profile?.profilePicture?.url;
+  const profileEmail = profile?.user?.email;
+
+  console.log(useLoaderData());
 
   React.useEffect(() => {
     function handleOutsideClick(event) {
@@ -46,16 +68,84 @@ export default function Layout() {
         <nav>
           <div className="cart">
             <ShoppingCart />
+            <h1>{cart?.length}</h1>
           </div>
-          {profile?.profilePicture ? (
+          {(profile?.firstname && (
             <div className="logged-profile-icon">
-              {!profile?.profilePicture?.url ? (
+              <div className="logged-profile-icon-container" ref={containerRef}>
+                {profilePicUrl ? (
+                  <img
+                    src={profilePicUrl}
+                    alt="user picture"
+                    onClick={() => setProfileState((prev) => !prev)}
+                  />
+                ) : (
+                  <h3 onClick={() => setProfileState((prev) => !prev)}>
+                    {firstname}
+                  </h3>
+                )}
+                {profileState && (
+                  <div className="profile-container">
+                    <div className="img-email">
+                      {profilePicUrl ? (
+                        <img
+                          src={profilePicUrl}
+                          alt="user picture"
+                          onLoad={() => setLoaded(true)}
+                        />
+                      ) : (
+                        <h3
+                          style={{ textTransform: "capitalize" }}
+                          className="h3"
+                        >
+                          {firstname}
+                        </h3>
+                      )}
+                      <p
+                        style={{
+                          textTransform: "capitalize",
+                          fontWeight: "500",
+                        }}
+                      >
+                        {fullName}
+                      </p>
+                      {/* <p>{profile?.user?.email}</p> */}
+                    </div>
+                    <div>
+                      <Link to={"/profile"}>
+                        <AccountCircle />
+                        Account info
+                      </Link>
+                      <Link to={"/orders"}>
+                        <ShoppingCartCheckout /> Orders
+                      </Link>
+                      <Link
+                        to={"/logout"}
+                        onClick={() => {
+                          localStorage.clear();
+                          setProfileState((prev) => !prev);
+                        }}
+                      >
+                        <Logout />
+                        Log out
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )) ||
+            (!firstname && email && (
+              <div className="logged-profile-icon">
                 <div
                   className="logged-profile-icon-container"
                   ref={containerRef}
                 >
-                  <h3 onClick={() => setProfileState((prev) => !prev)}>
-                    {firstname}
+                  <h3
+                    style={{ textTransform: "capitalize" }}
+                    onClick={() => setProfileState((prev) => !prev)}
+                  >
+                    {email.charAt(0)}
                   </h3>
                   {profileState && (
                     <div className="profile-container">
@@ -64,9 +154,9 @@ export default function Layout() {
                           style={{ textTransform: "capitalize" }}
                           className="h3"
                         >
-                          {firstname}
+                          {email.charAt(0)}
                         </h3>
-                        <p>{profile?.user?.email}</p>
+                        <p>{email}</p>
                       </div>
                       <div>
                         <Link to={"/profile"}>
@@ -90,70 +180,26 @@ export default function Layout() {
                     </div>
                   )}
                 </div>
-              ) : (
-                <div
-                  className="logged-profile-icon-container"
-                  ref={containerRef}
-                >
-                  <img
-                    src={profile?.profilePicture?.url}
-                    alt="user picture"
-                    onClick={() => setProfileState((prev) => !prev)}
-                  />
-                  {profileState && (
-                    <div className="profile-container">
-                      <div className="img-email">
-                        <img
-                          src={profile?.profilePicture?.url}
-                          alt="user picture"
-                        />
-                        <h3 style={{ textTransform: "capitalize" }}>
-                          {profile?.firstname}
-                        </h3>
-                        <p>{profile?.user?.email}</p>
-                      </div>
-                      <div>
-                        <Link to={"/profile"}>
-                          <AccountCircle />
-                          Account info
-                        </Link>
-                        <Link to={"/orders"}>
-                          <ShoppingCartCheckout /> Orders
-                        </Link>
-                        <Link
-                          to={"/logout"}
-                          onClick={() => {
-                            localStorage.clear();
-                            setProfileState((prev) => !prev);
-                          }}
-                        >
-                          <Logout />
-                          Log out
-                        </Link>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="profile-icon" ref={containerRef}>
-              <div
-                className="user-icon"
-                onClick={() => setProfileState((prev) => !prev)}
-              >
-                <AccountCircle />
               </div>
-              {profileState && (
-                <div className="login">
-                  <Link to={"/login"}>
-                    <AccountCircle />
-                    Sign in
-                  </Link>
+            )) ||
+            (!profile && !email && (
+              <div className="profile-icon" ref={containerRef}>
+                <div
+                  className="user-icon"
+                  onClick={() => setProfileState((prev) => !prev)}
+                >
+                  <AccountCircle />
                 </div>
-              )}
-            </div>
-          )}
+                {profileState && (
+                  <div className="login">
+                    <Link to={"/login"}>
+                      <AccountCircle />
+                      Sign in
+                    </Link>
+                  </div>
+                )}
+              </div>
+            ))}
         </nav>
       </header>
       <Outlet />

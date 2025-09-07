@@ -1,6 +1,6 @@
 import React from "react";
 import { getProducts } from "./user-api";
-import { useLoaderData, Link, useNavigate } from "react-router-dom";
+import { useLoaderData, Link, Form, useNavigate } from "react-router-dom";
 import ProductCard from "./ProductCard";
 
 export async function loader({ request }) {
@@ -42,16 +42,18 @@ export default function Products() {
 
   return (
     <>
-      <h1>Products</h1>
-      <input
-        type="text"
-        name="productName"
-        placeholder="Search products..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
+      <div className="product-search">
+        <h1>Products</h1>
+        <input
+          type="text"
+          name="search"
+          placeholder="Search products..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
 
-      {!products && products.success === false && (
+      {products.length === 0 && (
         <h3 style={{ color: "red" }}>No products found</h3>
       )}
       <div className="products-container">

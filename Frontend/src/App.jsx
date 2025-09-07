@@ -16,7 +16,10 @@ import CompleteProfile, {
 } from "./user-components/CompleteProfile";
 import Products, { loader as productsLoader } from "./user-components/Products";
 import Layout, { loader as userLayoutLoader } from "./user-components/layout";
-import Product from "./user-components/Product";
+import Product, {
+  loader as productLoader,
+  action as productAction,
+} from "./user-components/Product";
 import Logout from "./user-components/Logout";
 
 export default function App() {
@@ -38,7 +41,12 @@ export default function App() {
         <Route path="/logout" element={<Logout />} />
         <Route path="/products" element={<Layout />} loader={userLayoutLoader}>
           <Route index element={<Products />} loader={productsLoader} />
-          <Route path=":id" element={<Product />} />
+          <Route
+            path=":id"
+            element={<Product />}
+            loader={productLoader}
+            action={productAction}
+          />
         </Route>
         <Route path="*" element={<NotFound />} />
       </>

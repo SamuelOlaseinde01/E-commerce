@@ -9,10 +9,15 @@ const connectDb = require("./db/connectdb");
 const productsRouter = require("./routers/products");
 const userRouter = require("./routers/user");
 const orderRouter = require("./routers/orders");
+const googleAuthRouter = require("./routers/googleAuth");
+const passport = require("passport");
+const configurePassport = require("./config/passport");
 
 const app = express();
 
 const port = process.env.PORT || 3000;
+
+configurePassport(passport);
 
 app.use(cors());
 app.use(xss());
@@ -20,6 +25,7 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.use("/auth", googleAuthRouter);
 app.use("/api/v1/orders", orderRouter);
 app.use("/api/v1/products", productsRouter);
 app.use("/api/v1/user", userRouter);

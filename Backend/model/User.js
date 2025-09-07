@@ -13,14 +13,26 @@ const UserSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, "Please provide your password"],
       minlength: [8, "Password must be at least 8 characters long"],
+    },
+    provider: {
+      type: String,
+      enum: ["local", "google"],
+      default: "local",
+    },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
     },
   },
   { timestamps: true }
 );
 
 UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password") || !this.password) {
+    return next();
+  }
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();
